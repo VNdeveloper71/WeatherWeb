@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Web</title>
+    <link rel="stylesheet" href="giaodien.css">
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+</head>
+<body>
+    <!--Loading Screen-->
+    <div id="loading-screen">
+        <div class="loading-content">
+            <div class="loading-title">
+                <span class="sun">☀</span>
+                <span>Weather Web</span>
+            </div>
+
+            <div class="loading-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <header>
+        <div class="logo">
+            <h1>🌤 Weather Web</h1>
+        </div>
+
+        <!--Search city-->
+        <div class="search-container">
+            <input type="text" id="city-input" list="history-list" placeholder="Search city...">
+            <datalist id="history-list"></datalist>
+            <button id="search-btn">Search</button>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-card">
+            <div class="weather-icon" id="weather-icon">☀</div>
+            <h2 id="temperature">--°C</h2>
+            <h3 id="weather-condition">Loading...</h3>
+            <p id="city-name">Search a city</p>
+            <p id="last-updated">🕒 Last updated: --:--</p>
+        </section>
+
+        <section class="weather-details">
+            <div class="detail-card">
+                <h4>🌡 Feels like</h4>
+                <p id="feels-like">--°C</p>
+            </div>
+            
+            <div class="detail-card">
+                <h4>💧 Humidity</h4>
+                <p id="humidity">--%</p>
+            </div>
+
+            <div class="detail-card">
+                <h4>💨 Wind</h4>
+                <p id="wind-speed">-- km/h</p>
+            </div>
+
+            <div class="detail-card">
+                <h4>🔆 UV index</h4>
+                <p id="uv-index">--</p>
+                <small id="uv-level">Loading...</small>
+            </div>
+
+            <div class="detail-card">
+                <h4>🌅 Sunrise</h4>
+                <p id="sunrise">--:--</p>
+            </div>
+
+            <div class="detail-card">
+                <h4>🌇 Sunset</h4>
+                <p id="sunset">--:--</p>
+            </div>
+
+            <div class="detail-card">
+                <h4>🌿 AQI</h4>
+                <p id="aqi">--</p>
+                <small id="aqi-level">Loading...</small>
+            </div>
+
+            <div class="detail-card">
+                <h4>🌙 Moon Phase</h4>
+                <p id="moon-phase-icon">🌑</p>
+                <small id="moon-phase-name">Loading...</small>
+            </div>
+
+            <div class="detail-card">
+                <h4>🌀 Pressure</h4>
+                <p id="pressure">-- hPa</p>
+            </div>
+        </section>
+
+        <section class="hourly-section">
+            <h2>Hourly Forecast</h2>
+
+            <div class="hourly-container" id="hourly-container">
+                
+            </div>
+        </section>
+
+        <section class="weekly-section">
+            <h2>7-Day Forecast</h2>
+            <div class="week-container" id="week-container">
+                
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p class="version">🌤 Weather Web v1.4.0</p>
+        <p>Powered by <a href="https://open-meteo.com/" target="_blank" rel="noreferrer noopener">Open-Meteo API</a></p>
+        <p>Created on Sunday, July 12, 2026, 7:16 p.m.</p>
+        <p>Author: Phan Trí Nguyễn (Vietnam)</p>
+        <p>Supporter: ChatGPT (OpenAI)</p>
+    </footer>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
