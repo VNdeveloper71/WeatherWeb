@@ -432,4 +432,8 @@ body.night .day-card p{
     .weather-icon{
         font-size: 70px;
     }
+
+    .week-container{
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
