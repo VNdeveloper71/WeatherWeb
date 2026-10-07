@@ -740,6 +740,7 @@ main{
     background: linear-gradient(90deg, rgba(18, 29, 52, 0), rgba(18, 29, 52, 0.72));
     border-radius: 0 18px 18px 0;
     pointer-events: none;
+    z-index: 0;
 }
 
 .sun-horizon {
@@ -764,13 +765,26 @@ main{
 
 .sun-arc {
     position: absolute;
-    left: 12%;
-    right: 12%;
-    bottom: 30px;
+    left: 8%;
+    width: 84%;
+    bottom: calc(54% + 11px);
     height: 4px;
     border-radius: 999px;
-    background: linear-gradient(90deg, rgba(188, 192, 196, 0.95) 0%, rgba(125, 128, 134, 0.9) 45%, rgba(85, 89, 95, 0.95) 100%);
-    box-shadow: 0 0 10px rgba(120, 116, 106, 0.08);
+    overflow: hidden;
+    background: rgba(92, 121, 151, 0.22);
+    box-shadow: 0 0 10px rgba(75, 157, 196, 0.12);
+    z-index: 1;
+}
+
+.sun-arc::before {
+    content: "";
+    display: block;
+    width: var(--sun-progress, 0%);
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #5b8db8, #58bfd0);
+    box-shadow: 0 0 8px rgba(88, 191, 208, 0.32);
+    transition: width 0.5s ease;
 }
 
 .sun-orb,
@@ -779,7 +793,7 @@ main{
     width: 26px;
     height: 26px;
     border-radius: 50%;
-    transition: left .35s ease, bottom .35s ease, opacity .35s ease, transform .35s ease;
+    z-index: 3;
 }
 
 .sun-orb {
@@ -794,6 +808,10 @@ main{
     bottom: 58px;
     background: radial-gradient(circle at 30% 30%, #ffffff 0%, #eef3ff 30%, #dfe7f7 62%, #b9c7e7 100%);
     box-shadow: 0 0 10px rgba(160, 178, 228, 0.25), 0 0 18px rgba(160, 178, 228, 0.18), 0 0 26px rgba(255,255,255,0.22);
+}
+
+.sun-time-marker {
+    z-index: 2;
 }
 
 .sun-orb-alt {

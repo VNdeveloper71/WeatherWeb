@@ -1,7 +1,7 @@
 //Weather Web
 //Support: ChatGPT
 
-//Lấy phần tử HTML
+//HTML elements
 const loadingScreen = document.getElementById("loading-screen");
 
 const cityInput = document.getElementById("city-input");
@@ -47,6 +47,7 @@ const sunCard = document.querySelector(".sun-card");
 const sunOrb = document.querySelector(".sun-orb");
 const moonOrb = document.querySelector(".moon-orb");
 const sunTimeMarkers = document.getElementById("sun-time-markers");
+const sunArc = document.querySelector(".sun-arc");
 
 const chartMetricConfig = {
     temperature: {
@@ -89,6 +90,7 @@ const chartMetricConfig = {
 
 let activeChartMetric = "temperature";
 let currentWeatherData = null;
+let sunProgressTimer = null;
 
 //Loading
 function showLoading() {
@@ -235,13 +237,13 @@ async function searchCity() {
 
 async function useCurrentLocation() {
     if (!navigator.geolocation) {
-        alert("Trình duyệt của bạn không hỗ trợ định vị.");
+        alert("Your browser does not support geolocation.");
         return;
     }
 
     showLoading();
     navigator.geolocation.getCurrentPosition(async ({ coords }) => {
-        cityName.textContent = "Vị trí hiện tại";
+        cityName.textContent = "Current location";
         try {
             await getWeather(coords.latitude, coords.longitude);
             getAQI(coords.latitude, coords.longitude);
@@ -249,11 +251,12 @@ async function useCurrentLocation() {
         }
         catch (error) {
             hideLoading();
-            alert(error.message);
+            console.error("Weather request for current location failed:", error);
+            alert("Unable to load weather for your current location. Please try again.");
         }
     }, () => {
         hideLoading();
-        alert("Permission to access location was denied.");
+        alert("Location access was denied.");
     });
 }
 
@@ -269,11 +272,11 @@ function loadHistory() {
 }
 function saveHistory(city) {
     let history = JSON.parse(localStorage.getItem("history")) || [];
-    // Nếu đã có thì xóa trước
+    // Remove the city if it is already in the history.
     history = history.filter(item => item !== city);
-    // Thêm lên đầu
+    // Add the city to the beginning of the history.
     history.unshift(city);
-    // Chỉ giữ 10 thành phố
+    // Keep only the 10 most recent cities.
     history = history.slice(0, 10);
     localStorage.setItem(
         "history",
@@ -385,16 +388,31 @@ function updateSunPosition(data) {
         renderTimeMarkers();
     }
 
-    const currentTime = (data.current && data.current.time) || "2024-01-01T12:00";
-    const nowHour = parseLocalHour(currentTime);
     const sunriseHour = parseLocalHour(data.daily.sunrise[0]);
     const sunsetHour = parseLocalHour(data.daily.sunset[0]);
 
-    const sunPoint = getArcPoint(nowHour, visualWidth, visualHeight);
+    const sunPoint = getArcPoint(sunriseHour, visualWidth, visualHeight);
     sunOrb.style.display = "block";
     sunOrb.style.left = `${sunPoint.x}px`;
     sunOrb.style.bottom = `${sunPoint.y}px`;
     sunOrb.style.transform = "translateX(-50%)";
+
+    if (sunArc) {
+        const utcOffsetSeconds = Number(data.utc_offset_seconds) || 0;
+        const updateProgress = () => {
+            const localTime = new Date(Date.now() + utcOffsetSeconds * 1000);
+            const localHour = localTime.getUTCHours()
+                + localTime.getUTCMinutes() / 60
+                + localTime.getUTCSeconds() / 3600;
+            sunArc.style.setProperty("--sun-progress", `${(localHour / 24) * 100}%`);
+        };
+
+        updateProgress();
+        if (sunProgressTimer !== null) {
+            clearInterval(sunProgressTimer);
+        }
+        sunProgressTimer = setInterval(updateProgress, 60_000);
+    }
 
     if (moonOrb) {
         const moonHour = Math.min(Math.max(sunsetHour + 1.2, 18.5), 21.5);
